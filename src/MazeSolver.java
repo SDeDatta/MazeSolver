@@ -58,12 +58,8 @@ public class MazeSolver {
         MazeCell cellToAdd;
         MazeCell currentCell = maze.getStartCell();
         nextCells.push(currentCell);
-        while(!nextCells.isEmpty())
+        while(!nextCells.isEmpty() && nextCells.peek() != maze.getEndCell())
         {
-            if(currentCell == maze.getEndCell())
-            {
-                return getSolution();
-            }
             int row = currentCell.getRow();
             int col = currentCell.getCol();
             if(maze.isValidCell(row - 1,col))
@@ -96,7 +92,7 @@ public class MazeSolver {
             }
             currentCell = nextCells.pop();
         }
-        return null;
+        return getSolution();
     }
 
     /**
@@ -112,7 +108,7 @@ public class MazeSolver {
         nextCells.add(currentCell);
         while(!nextCells.isEmpty())
         {
-            currentCell = nextCells.poll();
+            currentCell = nextCells.remove();
             if(currentCell == maze.getEndCell())
             {
                 return getSolution();
