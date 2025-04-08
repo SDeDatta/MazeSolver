@@ -146,17 +146,17 @@ public class Maze {
      * @return boolean true/false
      */
     public boolean isValidCell(int row, int col) {
+        // Ensures the row and column are within the boundaries of the grid
         if(row >= 0 && row < mazeGrid.length && col >= 0 && col < mazeGrid[0].length)
         {
             MazeCell cell = mazeGrid[row][col];
+            // Ensures we can visit the cell by making sure it hasn't been explored and isn't a wall
             if(!cell.isExplored())
             {
-                if(!cell.isWall())
-                {
-                    return true;
-                }
+                return !cell.isWall();
             }
         }
+        // Returns false otherwise
         return false;
     }
 }
