@@ -30,20 +30,23 @@ public class MazeSolver {
      * @return An arraylist of MazeCells to visit in order
      */
     public ArrayList<MazeCell> getSolution() {
-        // TODO: Get the solution from the maze
-        // Should be from start to end cells
+        // Gets the solution to the maze
         Stack <MazeCell> stack = new Stack<>();
         MazeCell end = maze.getEndCell();
+        // Backtracks through the parents to get the solution to the maze (in reverse)
         while(end != null)
         {
             stack.push(end);
             end = end.getParent();
         }
+        // Utilizes a list to ge the ordered solution
         ArrayList<MazeCell> list = new ArrayList<MazeCell>();
+        // Pops the top of the stack to get the cells in proper order until the stack is empty
         while(!stack.isEmpty())
         {
             list.add(stack.pop());
         }
+        // Returns the solution in correct order (start to finish)
         return list;
     }
 
@@ -52,20 +55,23 @@ public class MazeSolver {
      * @return An ArrayList of MazeCells in order from the start to end cell
      */
     public ArrayList<MazeCell> solveMazeDFS() {
-        // TODO: Use DFS to solve the maze
         // Explore the cells in the order: NORTH, EAST, SOUTH, WEST
+        // Uses a stack to keep track of the DFS order
         Stack<MazeCell> nextCells = new Stack<MazeCell>();
         MazeCell cellToAdd;
         MazeCell currentCell = maze.getStartCell();
+        // Marks the start as the first step to solving the maze with DFS
         nextCells.push(currentCell);
-        while(!nextCells.isEmpty() && nextCells.peek() != maze.getEndCell())
+        while(!nextCells.isEmpty())
         {
             int row = currentCell.getRow();
             int col = currentCell.getCol();
+            // Checks to see if the neighbors can be explored (in order)
             if(maze.isValidCell(row - 1,col))
             {
                 cellToAdd = maze.getCell(row - 1, col);
                 cellToAdd.setParent(currentCell);
+                // Sets the neighboring cell as explored to make sure we don't go back to it after visiting once
                 cellToAdd.setExplored(true);
                 nextCells.push(cellToAdd);
             }
@@ -90,8 +96,10 @@ public class MazeSolver {
                 cellToAdd.setExplored(true);
                 nextCells.push(cellToAdd);
             }
+            // Uses LIFO to go as far in one path before backtracking
             currentCell = nextCells.pop();
         }
+        // Returns the path from start to end
         return getSolution();
     }
 
@@ -100,25 +108,24 @@ public class MazeSolver {
      * @return An ArrayList of MazeCells in order from the start to end cell
      */
     public ArrayList<MazeCell> solveMazeBFS() {
-        // TODO: Use BFS to solve the maze
         // Explore the cells in the order: NORTH, EAST, SOUTH, WEST
+        // Uses a queue to keep track of the BFS order
         Queue<MazeCell> nextCells = new LinkedList<>();
         MazeCell cellToAdd;
         MazeCell currentCell = maze.getStartCell();
         nextCells.add(currentCell);
+        // Marks the start as the first step to solving the maze with BFS
         while(!nextCells.isEmpty())
         {
+            // Removes the first cell in the queue (FIFO)
             currentCell = nextCells.remove();
-            if(currentCell == maze.getEndCell())
-            {
-                return getSolution();
-            }
             int row = currentCell.getRow();
             int col = currentCell.getCol();
             if(maze.isValidCell(row - 1,col))
             {
                 cellToAdd = maze.getCell(row - 1, col);
                 cellToAdd.setParent(currentCell);
+                // Sets the neighboring cell as explored to make sure we don't go back to it after visiting once
                 cellToAdd.setExplored(true);
                 nextCells.add(cellToAdd);
             }
@@ -144,7 +151,8 @@ public class MazeSolver {
                 nextCells.add(cellToAdd);
             }
         }
-        return null;
+        // Returns the path from start to end
+        return getSolution();
     }
 
     public static void main(String[] args) {
